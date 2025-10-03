@@ -41,7 +41,6 @@ CREATE TABLE IF NOT EXISTS {table_name} (
     file_name   STRING,
     load_at     TIMESTAMP
 )
-CLUSTERED BY (mcc_code) INTO 4 BUCKETS
 STORED AS PARQUET
 TBLPROPERTIES (
     'parquet.compress'='SNAPPY'
@@ -62,8 +61,11 @@ df = spark.createDataFrame(data, schema=schema)
 df = df.withColumn("file_name", lit(os.path.basename(file_path))) \
         .withColumn("load_at", current_timestamp())
 
+df.printSchema()
+print(df.head())
 df.write.insertInto(table_name, overwrite=True)
 
 print(f"Data successfully ingested into table {table_name}.")
+
 print(f"Record count: {df.count()}")
 

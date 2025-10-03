@@ -8,7 +8,7 @@ from datetime import datetime
 import sys, os
 
 
-print("Transform crm_cust_info to silver layer")
+print("Transform users to silver layer")
 
 spark = (SparkSession.builder
             .appName('Transform table "users" from bronze to silver layer')
@@ -18,24 +18,6 @@ spark = (SparkSession.builder
             .config("spark.sql.catalogImplementation", "hive")
             .config("hive.metastore.uris", "thrift://localhost:9083")
             .enableHiveSupport()
-            .getOrCreate())
-spark.sparkContext.setLogLevel("ERROR")
-
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import (
-    col, when, regexp_replace,
-    lit, row_number, current_timestamp, monotonically_increasing_id, lead
-)
-from pyspark.sql.window import Window
-from datetime import datetime
-import sys, os
-
-
-print("Transform crm_cust_info to silver layer")
-
-spark = (SparkSession.builder
-            .appName('Transform table "users" from bronze to silver layer')
-            .config("spark.sql.warehouse.dir", "hdfs://localhost:9000/user/hive/warehouse")
             .getOrCreate())
 spark.sparkContext.setLogLevel("ERROR")
 

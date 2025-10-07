@@ -118,13 +118,6 @@ def generate_date_ranges(start_date, end_date, days_interval):
     
     return date_ranges
 
-def debug_column_type(df, col_name, step_name):
-    print(f"\n[DEBUG] {step_name}")
-    df.printSchema()
-    df.select(col_name).show(5, truncate=False)
-    print("-"*50)
-
-
 # ---------------------------
 def process_batch(batch_start, batch_end):
     """Process a single batch of transactions"""
@@ -203,7 +196,7 @@ def process_batch(batch_start, batch_end):
         how="left"
     )
     
-        # Enrich data with calculated fields
+    # Enrich data with calculated fields
     df_enriched = df_with_cards \
         .withColumn("client_age", 
                     year(col("date_time")) - col("birth_year")) \
@@ -211,7 +204,7 @@ def process_batch(batch_start, batch_end):
                     when(col("card_credit_limit") > 0,
                          (col("amount") / col("card_credit_limit")).cast(DecimalType(10, 4))
                     ).otherwise(lit(0))) \
-        .withColumn("card_on_dark_web",
+        .withColumn("card_on_dark_web", # remove after
                     when(col("card_on_dark_web") == "Yes", lit(True))
                     .when(col("card_on_dark_web") == "No", lit(False))
                     .otherwise(lit(False))) \

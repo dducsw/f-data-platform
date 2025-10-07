@@ -13,7 +13,7 @@ print("Transform transactions to silver layer")
 # Batch configuration
 BATCH_START_DATE = "2019-01-01"
 BATCH_END_DATE = "2019-01-30"# datetime.now().strftime("%Y-%m-%d")
-BATCH_DAYS = 7  # batch theo tuần
+BATCH_DAYS = 7  # batch size
 
 # ---------------------------
 # Create Spark session

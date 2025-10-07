@@ -135,6 +135,10 @@ try:
                  regexp_replace(col("credit_limit"), "[^0-9.-]", "").cast("decimal(12,2)")
             ).otherwise(lit(None))
         )
+        .withColumn("card_on_dark_web",
+                    when(col("card_on_dark_web") == "Yes", lit(True))
+                    .when(col("card_on_dark_web") == "No", lit(False))
+                    .otherwise(lit(False))) \
         
         # Clean up temporary columns
         .drop("expires_month_str", "expires_year_str", "current_year", "current_month", 

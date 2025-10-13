@@ -55,8 +55,8 @@ def main():
         "user": os.getenv("PG_USER", "postgres"),
         "password": os.getenv("PG_PASSWORD", "6666"),
         "driver": "org.postgresql.Driver",
-        "fetchsize": "10000",  # Optimize JDBC fetch size
-        "batchsize": "10000"   # Optimize batch size
+        "fetchsize": "10000",  
+        "batchsize": "10000"  
     }
 
     spark = create_spark_session(f"Ingest-{source_table}")

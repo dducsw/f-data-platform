@@ -23,14 +23,8 @@ spark = (SparkSession.builder
          .config("spark.sql.warehouse.dir", "hdfs://localhost:9000/user/hive/warehouse")
          .config("spark.sql.catalogImplementation", "hive")
          .config("hive.metastore.uris", "thrift://localhost:9083")
-         .config("spark.driver.memory", "4g")  
-         .config("spark.executor.memory", "4g") 
-         .config("spark.executor.cores", "2")
-         .config("spark.driver.maxResultSize", "4g")
          .config("spark.sql.adaptive.enabled", "true")
          .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
-         .config("spark.sql.adaptive.advisoryPartitionSizeInBytes", "64MB")
-         .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
          .enableHiveSupport()
          .getOrCreate())
 spark.sparkContext.setLogLevel("ERROR")
@@ -71,6 +65,9 @@ CREATE TABLE IF NOT EXISTS dlh_gold.transaction_detail (
 
     -- Date/Time
     txn_date_time               TIMESTAMP,
+    txn_year                    INT,
+    txn_month                   INT,
+    txn_day                     INT,
     txn_hour                    INT,
 
     -- Merchant info

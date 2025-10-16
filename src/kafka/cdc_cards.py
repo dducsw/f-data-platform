@@ -12,19 +12,19 @@ spark = SparkSession.builder \
 # Configuration
 KAFKA_SERVERS = "localhost:9092"
 TOPIC = "finance.public.cards"
-OUTPUT_PATH = "/user/hive/warehouse/bronze.db/finance_cards"
+OUTPUT_PATH = "/user/hive/warehouse/dl_bronze.db/cards"
 CHECKPOINT_PATH = f"{OUTPUT_PATH}/_checkpoints"
 
 # Create Bronze database and table
 spark.sql("CREATE DATABASE IF NOT EXISTS dl_bronze")
 spark.sql(f"""
-    CREATE TABLE IF NOT EXISTS dl_bronze.finance_cards (
+    CREATE TABLE IF NOT EXISTS dl_bronze.cards (
         -- Kafka metadata
         kafka_key STRING,
         kafka_offset BIGINT,
         kafka_timestamp TIMESTAMP,
         
-        -- Raw CDC data (giữ nguyên cho Silver)
+        -- Raw CDC data
         cdc_payload STRING,
         
         -- Basic CDC info
@@ -73,7 +73,7 @@ def write_batch(batch_df, batch_id):
     if batch_df.count() > 0:
         batch_df.write \
             .mode("append") \
-            .insertInto("bronze.finance_cards")
+            .insertInto("bronze.cards")
         
         print(f"Batch {batch_id}: {batch_df.count()} records written to Bronze")
 

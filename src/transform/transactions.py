@@ -11,8 +11,8 @@ print("Transform transactions to silver layer")
 
 # ---------------------------
 # Batch configuration
-BATCH_START_DATE = "2019-01-01"
-BATCH_END_DATE = "2019-01-30"# datetime.now().strftime("%Y-%m-%d")
+BATCH_START_DATE = "2010-01-01"
+BATCH_END_DATE = datetime.now().strftime("%Y-%m-%d")
 BATCH_DAYS = 7  # batch size
 
 # ---------------------------
@@ -22,14 +22,8 @@ spark = (SparkSession.builder
          .config("spark.sql.warehouse.dir", "hdfs://localhost:9000/user/hive/warehouse")
          .config("spark.sql.catalogImplementation", "hive")
          .config("hive.metastore.uris", "thrift://localhost:9083")
-         .config("spark.driver.memory", "8g")  
-         .config("spark.executor.memory", "8g") 
-         .config("spark.executor.cores", "6")
-         .config("spark.driver.maxResultSize", "4g")
          .config("spark.sql.adaptive.enabled", "true")
          .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
-         .config("spark.sql.adaptive.advisoryPartitionSizeInBytes", "64MB")
-         .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
          .enableHiveSupport()
          .getOrCreate())
 spark.sparkContext.setLogLevel("ERROR")
@@ -48,6 +42,8 @@ CREATE TABLE IF NOT EXISTS dlh_silver.transactions (
     card_id             INT,
     card_key            INT,
     date_time           TIMESTAMP,
+    year                INT,
+    month               INT,
     day                 INT,
     hour                INT,
     amount              DECIMAL(18,4),

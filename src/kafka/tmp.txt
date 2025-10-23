@@ -1,0 +1,53 @@
+Traceback (most recent call last):
+  File "/home/ldduc/D/f-data-platform/src/kafka/cdc_cards.py", line 88, in <module>
+    query.awaitTermination()
+  File "/usr/local/spark/python/lib/pyspark.zip/pyspark/sql/streaming/query.py", line 225, in awaitTermination
+  File "/usr/local/spark/python/lib/py4j-0.10.9.9-src.zip/py4j/java_gateway.py", line 1362, in __call__
+  File "/usr/local/spark/python/lib/pyspark.zip/pyspark/errors/exceptions/captured.py", line 288, in deco
+pyspark.errors.exceptions.captured.StreamingQueryException: [STREAM_FAILED] Query [id = b94d3e5e-426a-42c7-8383-ec0c11ff5fd0, runId = 56c746e4-5ffd-4648-9309-d19f92b81c37] terminated with exception: Job aborted due to stage failure: Task 0 in stage 0.0 failed 1 times, most recent failure: Lost task 0.0 in stage 0.0 (TID 0) (192.168.17.128 executor driver): java.lang.NoSuchMethodError: 'void org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumerPool$PoolConfig.setMinEvictableIdleDuration(java.time.Duration)'
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumerPool$PoolConfig.init(InternalKafkaConsumerPool.scala:186)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumerPool$PoolConfig.<init>(InternalKafkaConsumerPool.scala:163)
+	at org.apache.spark.sql.kafka010.consumer.InternalKafkaConsumerPool.<init>(InternalKafkaConsumerPool.scala:54)
+	at org.apache.spark.sql.kafka010.consumer.KafkaDataConsumer$.<clinit>(KafkaDataConsumer.scala:711)
+	at org.apache.spark.sql.kafka010.KafkaBatchPartitionReader.<init>(KafkaBatchPartitionReader.scala:72)
+	at org.apache.spark.sql.kafka010.KafkaBatchReaderFactory$.createReader(KafkaBatchPartitionReader.scala:60)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.advanceToNextIter(DataSourceRDD.scala:85)
+	at org.apache.spark.sql.execution.datasources.v2.DataSourceRDD$$anon$1.hasNext(DataSourceRDD.scala:64)
+	at org.apache.spark.InterruptibleIterator.hasNext(InterruptibleIterator.scala:37)
+	at scala.collection.Iterator$$anon$9.hasNext(Iterator.scala:583)
+	at org.apache.spark.sql.catalyst.expressions.GeneratedClass$GeneratedIteratorForCodegenStage1.processNext(Unknown Source)
+	at org.apache.spark.sql.execution.BufferedRowIterator.hasNext(BufferedRowIterator.java:43)
+	at org.apache.spark.sql.execution.WholeStageCodegenEvaluatorFactory$WholeStageCodegenPartitionEvaluator$$anon$1.hasNext(WholeStageCodegenEvaluatorFactory.scala:50)
+	at org.apache.spark.sql.execution.UnsafeExternalRowSorter.sort(UnsafeExternalRowSorter.java:225)
+	at org.apache.spark.sql.execution.SortExec.$anonfun$doExecute$1(SortExec.scala:119)
+	at org.apache.spark.rdd.RDD.$anonfun$mapPartitionsInternal$2(RDD.scala:901)
+	at org.apache.spark.rdd.RDD.$anonfun$mapPartitionsInternal$2$adapted(RDD.scala:901)
+	at org.apache.spark.rdd.MapPartitionsRDD.compute(MapPartitionsRDD.scala:52)
+	at org.apache.spark.rdd.RDD.computeOrReadCheckpoint(RDD.scala:374)
+	at org.apache.spark.rdd.RDD.iterator(RDD.scala:338)
+	at org.apache.spark.scheduler.ResultTask.runTask(ResultTask.scala:93)
+	at org.apache.spark.TaskContext.runTaskWithListeners(TaskContext.scala:171)
+	at org.apache.spark.scheduler.Task.run(Task.scala:147)
+	at org.apache.spark.executor.Executor$TaskRunner.$anonfun$run$5(Executor.scala:647)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally(SparkErrorUtils.scala:80)
+	at org.apache.spark.util.SparkErrorUtils.tryWithSafeFinally$(SparkErrorUtils.scala:77)
+	at org.apache.spark.util.Utils$.tryWithSafeFinally(Utils.scala:99)
+	at org.apache.spark.executor.Executor$TaskRunner.run(Executor.scala:650)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+Driver stacktrace: SQLSTATE: XXKST
+=== Streaming Query ===
+Identifier: [id = b94d3e5e-426a-42c7-8383-ec0c11ff5fd0, runId = 56c746e4-5ffd-4648-9309-d19f92b81c37]
+Current Committed Offsets: {KafkaV2[Subscribe[finance.public.cards]]: {"finance.public.cards":{"0":6146}}}
+Current Available Offsets: {KafkaV2[Subscribe[finance.public.cards]]: {"finance.public.cards":{"0":6147}}}
+
+Current State: ACTIVE
+Thread State: RUNNABLE
+
+Logical Plan:
+~WriteToMicroBatchDataSourceV1 FileSink[hdfs://localhost:9000/user/hive/warehouse/bronze.db/cards], b94d3e5e-426a-42c7-8383-ec0c11ff5fd0, [path=/user/hive/warehouse/bronze.db/cards, checkpointLocation=/user/hive/warehouse/bronze.db/cards/_checkpoints, mergeSchema=true], Append
++- ~Project [cast(key#7 as string) AS kafka_key#14, offset#11L AS kafka_offset#15L, timestamp#12 AS kafka_timestamp#16, cast(value#8 as string) AS cdc_payload#17, get_json_object(cast(value#8 as string), $.op) AS operation#18, cast(get_json_object(cast(value#8 as string), $.ts_ms) as bigint) AS cdc_timestamp#19L, get_json_object(cast(value#8 as string), $.source.table) AS source_table#20, get_json_object(cast(value#8 as string), $.source.schema) AS source_schema#21, current_timestamp() AS ingestion_time#22, date_format(current_timestamp(), yyyy-MM-dd, Some(Asia/Ho_Chi_Minh)) AS ingestion_date#23]
+   +- ~StreamingDataSourceV2ScanRelation[key#7, value#8, topic#9, partition#10, offset#11L, timestamp#12, timestampType#13] KafkaTable
+

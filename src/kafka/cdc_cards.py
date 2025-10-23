@@ -5,7 +5,7 @@ from pyspark.sql.types import *
 # Initialize Spark
 spark = SparkSession.builder \
     .appName("CDC_Cards_Bronze") \
-    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.13:4.0.0") \
+    .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.6") \
     .enableHiveSupport() \
     .getOrCreate()
 
@@ -73,7 +73,7 @@ def write_batch(batch_df, batch_id):
     if batch_df.count() > 0:
         batch_df.write \
             .mode("append") \
-            .insertInto("bronze.cards")
+            .insertInto("dl_bronze.cards")
         
         print(f"Batch {batch_id}: {batch_df.count()} records written to Bronze")
 

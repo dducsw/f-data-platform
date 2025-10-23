@@ -18,7 +18,7 @@ def create_spark_session(app_name: str) -> SparkSession:
     spark = SparkSession.builder \
             .appName(app_name) \
             .config("spark.sql.warehouse.dir", "hdfs://localhost:9000/user/hive/warehouse") \
-            .config("spark.sql.hive.metastore.version", "4.0.1") \
+            .config("spark.sql.hive.metastore.version", "3.1.3") \
             .config("spark.sql.hive.metastore.jars", "/usr/local/hive/lib/*") \
             .config("spark.sql.catalogImplementation", "hive") \
             .config("hive.metastore.uris", "thrift://localhost:9083") \

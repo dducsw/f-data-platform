@@ -1,4 +1,3 @@
-DROP VIEW IF EXISTS dlh_gold.vw_transaction_summary;
 
 CREATE VIEW dlh_gold.vw_transaction_summary AS
 SELECT 
